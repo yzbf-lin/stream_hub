@@ -29,6 +29,18 @@ backend/plugin/stream_hub
 
 不建议把业务命令放进这里。任务启动、表单提交、状态变更仍应走对应业务 API；`stream_hub` 只负责服务端主动把结果推给前端。
 
+## 推荐接入流程
+
+业务模块接入时只需要关心自己的 stream 定义和发布时机，不需要手写事件名、房间名或 Redis key。
+
+1. 在业务模块中定义 `StreamHubStreamSpec` 或 `StreamHubLogStreamSpec`。
+2. 普通资源订阅使用 `bind_stream_hub` 注册；需要权限校验、参数校验或自定义 snapshot 时，在业务 `actions.py` 里手写 subscribe handler。
+3. 状态、进度、行为记录等结构化事件使用 `StreamHubPublisher.publish()` 推送。
+4. 日志追加使用 `stream_hub_log_stream.append()`，历史日志使用 `stream_hub_log_stream.tail()`。
+5. 前端使用同一组 `domain`、`stream`、`resource`、`features` 定义 schema 后订阅。
+
+日志文件 API 是插件提供的运维查看能力，主要用于演示和复用 `backend/log` 文件 tail/follow/download 的基础能力。业务实时日志不要求绑定到日志文件页面；更推荐按业务资源定义自己的日志 stream。
+
 ## 核心对象
 
 ```python
@@ -185,6 +197,8 @@ stream_hub_file_log_append
 ```text
 stream_hub:file_log:{fileId}
 ```
+
+这组 API 被前端插件内置的日志控制台示例页面使用。接入方可以复用 API 和 follow 机制，也可以完全不注册这个页面，只使用事件流和日志流能力。
 
 ## 配置项
 
