@@ -1,0 +1,1 @@
+-- stream_hub currently supports mysql only.
