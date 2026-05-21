@@ -29,6 +29,22 @@ backend/plugin/stream_hub
 
 不建议把业务命令放进这里。任务启动、表单提交、状态变更仍应走对应业务 API；`stream_hub` 只负责服务端主动把结果推给前端。
 
+核心代码按职责分层：
+
+```text
+stream_hub/
+├── __init__.py          # 对外稳定导出入口
+├── actions.py           # 插件启动时绑定 Socket.IO 事件
+├── api/                 # HTTP API
+├── core/                # stream spec、publisher、registry、subscription
+├── service/             # 日志 tail、日志文件服务、文件 follow
+├── schema/              # API schema
+├── sql/                 # 菜单与初始化 SQL
+└── utils/               # 无状态辅助函数
+```
+
+业务调用方优先从 `backend.plugin.stream_hub` 导入公开对象，不直接依赖 `core/`、`service/` 内部路径。
+
 ## 推荐接入流程
 
 业务模块接入时只需要关心自己的 stream 定义和发布时机，不需要手写事件名、房间名或 Redis key。
@@ -50,8 +66,8 @@ from backend.plugin.stream_hub import (
     StreamHubStreamSpec,
     TailPolicy,
     bind_stream_hub,
+    stream_hub_log_stream,
 )
-from backend.plugin.stream_hub.log_stream import stream_hub_log_stream
 ```
 
 - `StreamHubStreamSpec`：定义普通事件流的 `domain`、`stream`、`resource`、`features`。

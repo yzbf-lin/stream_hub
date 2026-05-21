@@ -10,13 +10,13 @@ from typing import Any
 
 from backend.common.exception.errors import RequestError
 from backend.core.conf import settings
-from backend.plugin.stream_hub.log_stream import stream_hub_log_stream
+from backend.plugin.stream_hub.service.log_stream_service import stream_hub_log_stream
 from backend.plugin.stream_hub.schema.log_file import LogFileFollowResponse
 from backend.plugin.stream_hub.service.log_file_service import (
     LogFileService,
     log_file_service,
 )
-from backend.plugin.stream_hub.spec import StreamHubLogStreamSpec
+from backend.plugin.stream_hub.core.spec import StreamHubLogStreamSpec
 
 
 STREAM_HUB_FILE_LOG_STREAM = StreamHubLogStreamSpec(

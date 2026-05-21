@@ -6,7 +6,7 @@ from typing import Any
 
 from backend.common.socketio.server import sio
 from backend.database.redis import redis_client
-from backend.plugin.stream_hub.spec import StreamHubLogStreamSpec
+from backend.plugin.stream_hub.core.spec import StreamHubLogStreamSpec
 from backend.utils.timezone import timezone
 
 

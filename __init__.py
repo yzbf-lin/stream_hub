@@ -1,15 +1,23 @@
-from .publisher import StreamHubPublisher
-from .registry import StreamHubStreamRegistry, stream_hub_registry
+from .core import (
+    StreamHubLogStreamSpec,
+    StreamHubPublisher,
+    StreamHubStreamRegistry,
+    StreamHubStreamSpec,
+    SnapshotLoader,
+    TailPolicy,
+    bind_stream_hub,
+    stream_hub_registry,
+)
 from .service.file_log_tail_service import (
     STREAM_HUB_FILE_LOG_STREAM,
     FileLogTailManager,
     file_log_tail_manager,
 )
-from .spec import StreamHubLogStreamSpec, StreamHubStreamSpec, SnapshotLoader, TailPolicy
-from .subscription import bind_stream_hub
+from .service.log_stream_service import StreamHubLogStream, stream_hub_log_stream
 
 __all__ = [
     "FileLogTailManager",
+    "StreamHubLogStream",
     "StreamHubLogStreamSpec",
     "StreamHubPublisher",
     "STREAM_HUB_FILE_LOG_STREAM",
@@ -19,5 +27,6 @@ __all__ = [
     "TailPolicy",
     "bind_stream_hub",
     "file_log_tail_manager",
+    "stream_hub_log_stream",
     "stream_hub_registry",
 ]
